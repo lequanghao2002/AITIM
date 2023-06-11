@@ -21,13 +21,13 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
   switch (settings.name) {
     case DetailScreen.routeName:
       return MaterialPageRoute(
-          //settings: settings,
+          settings: settings,
           builder: (context) {
-        final MedicineModel medicineModel =
-            (settings.arguments as MedicineModel);
-        return DetailScreen(
-          medicineModel: medicineModel,
-        );
-      });
+            final MedicineModel medicineModel =
+                (settings.arguments as MedicineModel);
+            return DetailScreen(
+              medicineModel: medicineModel,
+            );
+          });
   }
 }

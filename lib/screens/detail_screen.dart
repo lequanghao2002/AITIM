@@ -77,7 +77,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.medicineModel.yeuThich = true;
+                                // widget.medicineModel.yeuThich = true;
                               });
                             },
                             child: Container(
@@ -98,7 +98,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         : GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.medicineModel.yeuThich = false;
+                                //widget.medicineModel.yeuThich = false;
                               });
                             },
                             child: Container(
@@ -180,6 +180,28 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                           SizedBox(
                             height: 30,
+                          ),
+                          Text(
+                            'Họ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: kMinPadding,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              widget.medicineModel.ho,
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 14,
                           ),
                           Text(
                             'Mô tả',

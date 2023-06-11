@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lookup_app/core/helpers/asset_helper.dart';
 import 'package:lookup_app/core/helpers/image_helper.dart';
 import 'package:lookup_app/screens/main_screen.dart';
 
@@ -40,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Container(
       child: ImageHelper.loadFromAsset(
-        AssetHelper.imgSplashBackground,
+        'assets/images/splash_background.png',
         fit: BoxFit.fitWidth,
       ),
     );

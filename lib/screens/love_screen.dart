@@ -168,7 +168,7 @@ class _LoveScreenState extends State<LoveScreen> {
                                                   ? GestureDetector(
                                                       onTap: () {
                                                         setState(() {
-                                                          e.yeuThich = true;
+                                                          e.yeuThich = 1;
                                                         });
                                                       },
                                                       child: Icon(
@@ -178,7 +178,7 @@ class _LoveScreenState extends State<LoveScreen> {
                                                   : GestureDetector(
                                                       onTap: () {
                                                         setState(() {
-                                                          e.yeuThich = false;
+                                                          e.yeuThich = 0;
                                                         });
                                                       },
                                                       child: Icon(

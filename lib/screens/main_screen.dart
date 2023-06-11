@@ -28,8 +28,8 @@ class _MainScreenState extends State<MainScreen> {
         // ignore: prefer_const_literals_to_create_immutables
         children: [
           HomeScreen(),
-          LoveScreen(),
-          CameraScreen(),
+          // LoveScreen(),
+          // CameraScreen(),
         ],
       ),
       bottomNavigationBar: SalomonBottomBar(
@@ -54,20 +54,20 @@ class _MainScreenState extends State<MainScreen> {
             title: Text('Trang chủ'),
             selectedColor: ColorPalette.primaryColor,
           ),
-          SalomonBottomBarItem(
-            icon: Icon(
-              FontAwesomeIcons.solidHeart,
-              size: kDefaultIconSize,
-            ),
-            title: Text('Yêu thích'),
-          ),
-          SalomonBottomBarItem(
-            icon: Icon(
-              FontAwesomeIcons.magnifyingGlass,
-              size: kDefaultIconSize,
-            ),
-            title: Text('Tìm kiếm'),
-          ),
+          // SalomonBottomBarItem(
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidHeart,
+          //     size: kDefaultIconSize,
+          //   ),
+          //   title: Text('Yêu thích'),
+          // ),
+          // SalomonBottomBarItem(
+          //   icon: Icon(
+          //     FontAwesomeIcons.magnifyingGlass,
+          //     size: kDefaultIconSize,
+          //   ),
+          //   title: Text('Tìm kiếm'),
+          // ),
         ],
       ),
     );

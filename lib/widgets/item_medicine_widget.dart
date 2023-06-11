@@ -61,6 +61,8 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                       fontSize: kDefaultPadding,
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Spacer(),
@@ -83,7 +85,7 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.medicineModel.yeuThich = true;
+                                widget.medicineModel.yeuThich = 1;
                               });
                             },
                             child: Icon(
@@ -93,7 +95,7 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                         : GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.medicineModel.yeuThich = false;
+                                widget.medicineModel.yeuThich = 0;
                               });
                             },
                             child: Icon(
