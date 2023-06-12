@@ -24,7 +24,7 @@ class _LoveScreenState extends State<LoveScreen> {
   Iterable<MedicineModel> loveList = [];
   @override
   void initState() {
-    loveList = listMedicine.where((element) => element.yeuThich == true);
+    loveList = medicineData.where((element) => element.yeuThich == true);
     super.initState();
   }
 
@@ -168,7 +168,7 @@ class _LoveScreenState extends State<LoveScreen> {
                                                   ? GestureDetector(
                                                       onTap: () {
                                                         setState(() {
-                                                          e.yeuThich = 1;
+                                                          //e.yeuThich = 1;
                                                         });
                                                       },
                                                       child: Icon(
@@ -178,7 +178,7 @@ class _LoveScreenState extends State<LoveScreen> {
                                                   : GestureDetector(
                                                       onTap: () {
                                                         setState(() {
-                                                          e.yeuThich = 0;
+                                                          //e.yeuThich = 0;
                                                         });
                                                       },
                                                       child: Icon(

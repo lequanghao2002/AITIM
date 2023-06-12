@@ -46,7 +46,8 @@ class _DetailScreenState extends State<DetailScreen> {
                     GestureDetector(
                       onTap: () {
                         ///Navigator.of(context).pushNamed(MainScreen.routeName);
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -73,7 +74,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     Spacer(),
-                    widget.medicineModel.yeuThich == false
+                    widget.medicineModel.yeuThich == 0
                         ? GestureDetector(
                             onTap: () {
                               setState(() {

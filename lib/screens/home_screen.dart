@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lookup_app/core/constants/dimension_contants.dart';
-import 'package:lookup_app/data/medicine_data.dart';
+import 'package:lookup_app/database/medicine_database.dart';
 import 'package:lookup_app/models/medicine_model.dart';
 
 import '../core/constants/color_constants.dart';
@@ -17,31 +17,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<MedicineModel> list = [];
+  final textEditingController = TextEditingController();
+
+  var getListMedicines = MedicineDatabase.instance.getListMedicines();
 
   @override
   void initState() {
-    list = listMedicine;
+    // TODO: implement initState
     super.initState();
+
+    MedicineDatabase.instance.database;
   }
 
-  List<MedicineModel> result = [];
-
-  void runFilter(String keyWord) {
+  Future<List<MedicineModel>> searchFilter(String keyWord) async {
+    setState(() {});
     if (keyWord.isEmpty) {
-      result = listMedicine;
+      return MedicineDatabase.instance.getListMedicines();
     } else {
-      result = listMedicine
+      final medicines = getListMedicines.then((value) => value
           .where(
             (element) => element.tenVietNam.toLowerCase().contains(
                   keyWord.toLowerCase(),
                 ),
           )
-          .toList();
+          .toList());
+      return medicines;
     }
   }
-
-  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontal: kDefaultPadding,
                 ),
                 child: Row(
-                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
                     Text(
                       'AITIM',
@@ -107,37 +108,46 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          list.isEmpty
-              ? Container(
-                  margin: EdgeInsets.only(top: 206),
-                  padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-                  child: Center(
-                    child: Text(
-                      'Không tìm thấy dược liệu nào phù hợp với từ khóa',
+          FutureBuilder<List<MedicineModel>>(
+            future: searchFilter(textEditingController.text),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<MedicineModel>> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: Text(
+                    'Loading....',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+              }
+              return snapshot.data!.isEmpty
+                  ? Center(
+                      child: Text(
+                      'Không tìm thấy dược liệu có tên ${textEditingController.text}',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(top: 206),
-                  padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: list
-                          .map(
-                            (e) => ItemMedicineWidget(
-                              medicineModel: e,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                ),
+                    ))
+                  : Container(
+                      margin: EdgeInsets.only(top: 206),
+                      padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: snapshot.data!
+                              .map((medicine) =>
+                                  ItemMedicineWidget(medicineModel: medicine))
+                              .toList(),
+                        ),
+                      ),
+                    );
+            },
+          ),
           Container(
             height: 50,
             margin: EdgeInsets.only(top: 156),
@@ -145,10 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TextField(
               controller: textEditingController,
               onChanged: (value) {
-                runFilter(value);
-                setState(() {
-                  list = result;
-                });
+                searchFilter(value);
               },
               decoration: InputDecoration(
                 hintText: 'Tìm kiếm...',
@@ -163,9 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 suffixIcon: IconButton(
                   onPressed: () {
                     textEditingController.clear();
-                    setState(() {
-                      list = listMedicine;
-                    });
+                    setState(() {});
                   },
                   icon: Padding(
                     padding: EdgeInsets.all(kTopPadding),

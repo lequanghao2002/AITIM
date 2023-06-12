@@ -1,6 +1,6 @@
 import '../models/medicine_model.dart';
 
-final List<MedicineModel> listMedicine = [
+final List<MedicineModel> medicineData = [
   MedicineModel(
     id: 1,
     hinhAnh: 'assets/images/bakich.png',

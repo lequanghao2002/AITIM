@@ -81,11 +81,11 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                 Spacer(),
                 Row(
                   children: [
-                    widget.medicineModel.yeuThich == false
+                    widget.medicineModel.yeuThich == 0
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.medicineModel.yeuThich = 1;
+                                //widget.medicineModel.yeuThich = 1;
                               });
                             },
                             child: Icon(
@@ -95,7 +95,7 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                         : GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.medicineModel.yeuThich = 0;
+                                //widget.medicineModel.yeuThich = 0;
                               });
                             },
                             child: Icon(
