@@ -5,6 +5,7 @@ import 'package:lookup_app/core/helpers/image_helper.dart';
 import 'package:lookup_app/models/medicine_model.dart';
 
 import '../core/constants/color_constants.dart';
+import '../database/medicine_database.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.medicineModel});
@@ -78,7 +79,10 @@ class _DetailScreenState extends State<DetailScreen> {
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
-                                // widget.medicineModel.yeuThich = true;
+                                setState(() {
+                                  MedicineDatabase.instance
+                                      .updateMedicines(widget.medicineModel.id);
+                                });
                               });
                             },
                             child: Container(
@@ -99,7 +103,8 @@ class _DetailScreenState extends State<DetailScreen> {
                         : GestureDetector(
                             onTap: () {
                               setState(() {
-                                //widget.medicineModel.yeuThich = false;
+                                MedicineDatabase.instance
+                                    .updateMedicines2(widget.medicineModel.id);
                               });
                             },
                             child: Container(

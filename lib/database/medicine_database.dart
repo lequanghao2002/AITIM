@@ -24,7 +24,7 @@ class MedicineDatabase {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -106,5 +106,51 @@ class MedicineDatabase {
         : [];
 
     return listMedicines;
+  }
+
+  Future<List<MedicineModel>> getListMedicinesByLove() async {
+    print('Get list medicines by love');
+
+    MedicineDatabase.instance._initDatabase();
+
+    Database db = await instance.database;
+
+    var medicines =
+        await db.query('Medicines', orderBy: 'Id', where: 'YeuThich = 1');
+    List<MedicineModel> listMedicines = medicines.isNotEmpty
+        ? medicines.map((c) => MedicineModel.fromMap(c)).toList()
+        : [];
+
+    return listMedicines;
+  }
+
+  void updateMedicines(int id) async {
+    print('update medicines ${id}');
+
+    MedicineDatabase.instance._initDatabase();
+
+    Database db = await instance.database;
+
+    db.update(
+      'Medicines',
+      {'YeuThich': 1},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  void updateMedicines2(int id) async {
+    print('update medicines ${id}');
+
+    MedicineDatabase.instance._initDatabase();
+
+    Database db = await instance.database;
+
+    db.update(
+      'Medicines',
+      {'YeuThich': 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

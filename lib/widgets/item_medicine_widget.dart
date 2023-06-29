@@ -5,6 +5,8 @@ import 'package:lookup_app/core/helpers/image_helper.dart';
 import 'package:lookup_app/models/medicine_model.dart';
 import 'package:lookup_app/screens/detail_screen.dart';
 
+import '../database/medicine_database.dart';
+
 class ItemMedicineWidget extends StatefulWidget {
   const ItemMedicineWidget({super.key, required this.medicineModel});
 
@@ -85,7 +87,8 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
-                                //widget.medicineModel.yeuThich = 1;
+                                MedicineDatabase.instance
+                                    .updateMedicines(widget.medicineModel.id);
                               });
                             },
                             child: Icon(
@@ -95,7 +98,8 @@ class _ItemMedicineWidgetState extends State<ItemMedicineWidget> {
                         : GestureDetector(
                             onTap: () {
                               setState(() {
-                                //widget.medicineModel.yeuThich = 0;
+                                MedicineDatabase.instance
+                                    .updateMedicines2(widget.medicineModel.id);
                               });
                             },
                             child: Icon(

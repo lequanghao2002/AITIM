@@ -5,7 +5,9 @@ import 'package:lookup_app/database/medicine_database.dart';
 import 'package:lookup_app/models/medicine_model.dart';
 
 import '../core/constants/color_constants.dart';
+import '../core/helpers/image_helper.dart';
 import '../widgets/item_medicine_widget.dart';
+import 'detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -140,9 +142,138 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: snapshot.data!
-                              .map((medicine) =>
-                                  ItemMedicineWidget(medicineModel: medicine))
+                              .map((medicine) => Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          kDefaultPadding),
+                                      color: Colors.white,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color.fromRGBO(0, 0, 0, 0.1),
+                                          offset: Offset(1.0, 2.0),
+                                          blurRadius: 3.0,
+                                        )
+                                      ],
+                                    ),
+                                    margin:
+                                        EdgeInsets.only(top: kMediumPadding),
+                                    child: Row(
+                                      children: [
+                                        // Bug
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          child: ImageHelper.loadFromAsset(
+                                            medicine.hinhAnh,
+                                            radius: BorderRadius.all(
+                                              Radius.circular(kDefaultPadding),
+                                            ),
+                                            fit: BoxFit.fitWidth,
+                                            width: 160,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 14,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              SizedBox(
+                                                width: 160,
+                                                child: Text(
+                                                  'Tên: ${medicine.tenVietNam}',
+                                                  style: TextStyle(
+                                                    fontSize: kDefaultPadding,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              SizedBox(
+                                                width: 160,
+                                                child: Text(
+                                                  'Mô tả: ${medicine.moTa}',
+                                                  style: TextStyle(
+                                                    fontSize: kDefaultPadding,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Row(
+                                                children: [
+                                                  medicine.yeuThich == 0
+                                                      ? GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              MedicineDatabase
+                                                                  .instance
+                                                                  .updateMedicines(
+                                                                      medicine
+                                                                          .id);
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            FontAwesomeIcons
+                                                                .heart,
+                                                          ),
+                                                        )
+                                                      : GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              MedicineDatabase
+                                                                  .instance
+                                                                  .updateMedicines2(
+                                                                      medicine
+                                                                          .id);
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            FontAwesomeIcons
+                                                                .solidHeart,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pushNamed(
+                                                        DetailScreen.routeName,
+                                                        arguments: medicine,
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      FontAwesomeIcons
+                                                          .circleRight,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
                               .toList(),
+                          // .map((medicine) =>
+                          //     ItemMedicineWidget(medicineModel: medicine))
+                          // .toList(),
                         ),
                       ),
                     );

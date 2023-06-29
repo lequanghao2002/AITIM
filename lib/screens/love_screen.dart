@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lookup_app/models/medicine_model.dart';
 
 import '../core/constants/color_constants.dart';
 import '../core/constants/dimension_contants.dart';
 import '../core/helpers/image_helper.dart';
-import '../data/medicine_data.dart';
-import '../models/medicine_model.dart';
+import '../database/medicine_database.dart';
 import 'detail_screen.dart';
 
 class LoveScreen extends StatefulWidget {
@@ -18,16 +18,6 @@ class LoveScreen extends StatefulWidget {
 }
 
 class _LoveScreenState extends State<LoveScreen> {
-  // Iterable<MedicineModel> loveList =
-  //     listMedicine.where((element) => element.yeuThich == true);
-
-  Iterable<MedicineModel> loveList = [];
-  @override
-  void initState() {
-    loveList = medicineData.where((element) => element.yeuThich == true);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +38,7 @@ class _LoveScreenState extends State<LoveScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
+                  children: const [
                     Text(
                       'Danh sách yêu thích',
                       style: TextStyle(
@@ -79,144 +68,176 @@ class _LoveScreenState extends State<LoveScreen> {
               ),
             ),
           ),
-          loveList.isEmpty
-              ? Container(
-                  padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-                  child: Center(
-                    child: Text(
-                      'Chưa có dược liệu nào được thêm vào',
+          //---
+          FutureBuilder<List<MedicineModel>>(
+            future: MedicineDatabase.instance.getListMedicinesByLove(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<MedicineModel>> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: Text(
+                    'Loading....',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+              }
+              return snapshot.data!.isEmpty
+                  ? Center(
+                      child: Text(
+                      'Chưa có dược liệu nào được thêm vào danh sách yêu thích',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(top: 100),
-                  padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: loveList
-                          .map((e) => Container(
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(kDefaultPadding),
-                                  color: Colors.white,
-                                  // ignore: prefer_const_literals_to_create_immutables
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                                      offset: Offset(1.0, 2.0),
-                                      blurRadius: 3.0,
-                                    )
-                                  ],
-                                ),
-                                margin: EdgeInsets.only(top: kMediumPadding),
-                                child: Row(
-                                  children: [
-                                    // Bug
-                                    Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: ImageHelper.loadFromAsset(
-                                        e.hinhAnh,
-                                        radius: BorderRadius.all(
-                                          Radius.circular(kDefaultPadding),
-                                        ),
-                                        fit: BoxFit.fitWidth,
-                                        width: 160,
-                                      ),
+                    ))
+                  : Container(
+                      margin: EdgeInsets.only(top: 100),
+                      padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: snapshot.data!
+                              .map((medicine) => Container(
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          kDefaultPadding),
+                                      color: Colors.white,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color.fromRGBO(0, 0, 0, 0.1),
+                                          offset: Offset(1.0, 2.0),
+                                          blurRadius: 3.0,
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 14,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          SizedBox(
-                                            width: 160,
-                                            child: Text(
-                                              'Tên: ${e.tenVietNam}',
-                                              style: TextStyle(
-                                                fontSize: kDefaultPadding,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                    margin:
+                                        EdgeInsets.only(top: kMediumPadding),
+                                    child: Row(
+                                      children: [
+                                        // Bug
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          child: ImageHelper.loadFromAsset(
+                                            medicine.hinhAnh,
+                                            radius: BorderRadius.all(
+                                              Radius.circular(kDefaultPadding),
                                             ),
-                                          ),
-                                          Spacer(),
-                                          SizedBox(
+                                            fit: BoxFit.fitWidth,
                                             width: 160,
-                                            child: Text(
-                                              'Mô tả: ${e.moTa}',
-                                              style: TextStyle(
-                                                fontSize: kDefaultPadding,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
                                           ),
-                                          Spacer(),
-                                          Row(
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 14,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
                                             children: [
-                                              e.yeuThich == false
-                                                  ? GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          //e.yeuThich = 1;
-                                                        });
-                                                      },
-                                                      child: Icon(
-                                                        FontAwesomeIcons.heart,
-                                                      ),
-                                                    )
-                                                  : GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          //e.yeuThich = 0;
-                                                        });
-                                                      },
-                                                      child: Icon(
-                                                        FontAwesomeIcons
-                                                            .solidHeart,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ),
                                               SizedBox(
-                                                width: 20,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context)
-                                                      .pushNamed(
-                                                    DetailScreen.routeName,
-                                                    arguments: e,
-                                                  );
-                                                },
-                                                child: Icon(
-                                                  FontAwesomeIcons.circleRight,
+                                                width: 160,
+                                                child: Text(
+                                                  'Tên: ${medicine.tenVietNam}',
+                                                  style: TextStyle(
+                                                    fontSize: kDefaultPadding,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
+                                              Spacer(),
                                               SizedBox(
-                                                width: 20,
+                                                width: 160,
+                                                child: Text(
+                                                  'Mô tả: ${medicine.moTa}',
+                                                  style: TextStyle(
+                                                    fontSize: kDefaultPadding,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Row(
+                                                children: [
+                                                  medicine.yeuThich == 0
+                                                      ? GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              MedicineDatabase
+                                                                  .instance
+                                                                  .updateMedicines(
+                                                                      medicine
+                                                                          .id);
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            FontAwesomeIcons
+                                                                .heart,
+                                                          ),
+                                                        )
+                                                      : GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              MedicineDatabase
+                                                                  .instance
+                                                                  .updateMedicines2(
+                                                                      medicine
+                                                                          .id);
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            FontAwesomeIcons
+                                                                .solidHeart,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pushNamed(
+                                                        DetailScreen.routeName,
+                                                        arguments: medicine,
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      FontAwesomeIcons
+                                                          .circleRight,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                ),
+                                  ))
+                              .toList(),
+                          // .map((medicine) =>
+                          //     ItemMedicineWidget(medicineModel: medicine))
+                          // .toList(),
+                        ),
+                      ),
+                    );
+            },
+          ),
         ],
       ),
     );
