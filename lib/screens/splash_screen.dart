@@ -28,15 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return Stack(
-    //   children: [
-    //     Positioned.fill(
-    //       child: ImageHelper.loadFromAsset(AssetHelper.imgSplashBackground,
-    //           fit: BoxFit.fitWidth),
-    //     )
-    //   ],
-    // );
-
     return Container(
       child: ImageHelper.loadFromAsset(
         'assets/images/splash_background.png',

@@ -63,10 +63,10 @@ class _MainScreenState extends State<MainScreen> {
           ),
           SalomonBottomBarItem(
             icon: Icon(
-              FontAwesomeIcons.magnifyingGlass,
+              FontAwesomeIcons.camera,
               size: kDefaultIconSize,
             ),
-            title: Text('Tìm kiếm'),
+            title: Text('Nhận diện'),
           ),
         ],
       ),

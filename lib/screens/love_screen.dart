@@ -24,7 +24,6 @@ class _LoveScreenState extends State<LoveScreen> {
       body: Stack(
         children: [
           SizedBox(
-            // height: 186
             height: 100,
             child: AppBar(
               centerTitle: true,
@@ -68,7 +67,6 @@ class _LoveScreenState extends State<LoveScreen> {
               ),
             ),
           ),
-          //---
           FutureBuilder<List<MedicineModel>>(
             future: MedicineDatabase.instance.getListMedicinesByLove(),
             builder: (BuildContext context,
@@ -76,7 +74,7 @@ class _LoveScreenState extends State<LoveScreen> {
               if (!snapshot.hasData) {
                 return Center(
                   child: Text(
-                    'Loading....',
+                    'Đang tải....',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -88,9 +86,9 @@ class _LoveScreenState extends State<LoveScreen> {
               return snapshot.data!.isEmpty
                   ? Center(
                       child: Text(
-                      'Chưa có dược liệu nào được thêm vào danh sách yêu thích',
+                      'Trống',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -107,8 +105,7 @@ class _LoveScreenState extends State<LoveScreen> {
                                       borderRadius: BorderRadius.circular(
                                           kDefaultPadding),
                                       color: Colors.white,
-                                      // ignore: prefer_const_literals_to_create_immutables
-                                      boxShadow: [
+                                      boxShadow: const [
                                         BoxShadow(
                                           color: Color.fromRGBO(0, 0, 0, 0.1),
                                           offset: Offset(1.0, 2.0),
@@ -120,28 +117,17 @@ class _LoveScreenState extends State<LoveScreen> {
                                         EdgeInsets.only(top: kMediumPadding),
                                     child: Row(
                                       children: [
-                                        // Bug
-                                        Container(
-                                          margin: EdgeInsets.all(10),
-                                          child: ImageHelper.loadFromAsset(
-                                            medicine.hinhAnh,
-                                            radius: BorderRadius.all(
-                                              Radius.circular(kDefaultPadding),
-                                            ),
-                                            fit: BoxFit.fitWidth,
-                                            width: 160,
-                                          ),
-                                        ),
                                         Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 14,
-                                          ),
+                                          padding: EdgeInsets.all(10),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [
                                               SizedBox(
-                                                width: 160,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    70,
                                                 child: Text(
                                                   'Tên: ${medicine.tenVietNam}',
                                                   style: TextStyle(
@@ -155,7 +141,10 @@ class _LoveScreenState extends State<LoveScreen> {
                                               ),
                                               Spacer(),
                                               SizedBox(
-                                                width: 160,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    70,
                                                 child: Text(
                                                   'Mô tả: ${medicine.moTa}',
                                                   style: TextStyle(
@@ -203,7 +192,7 @@ class _LoveScreenState extends State<LoveScreen> {
                                                           ),
                                                         ),
                                                   SizedBox(
-                                                    width: 20,
+                                                    width: 25,
                                                   ),
                                                   GestureDetector(
                                                     onTap: () {
@@ -218,9 +207,6 @@ class _LoveScreenState extends State<LoveScreen> {
                                                           .circleRight,
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
                                                 ],
                                               ),
                                             ],
@@ -230,9 +216,6 @@ class _LoveScreenState extends State<LoveScreen> {
                                     ),
                                   ))
                               .toList(),
-                          // .map((medicine) =>
-                          //     ItemMedicineWidget(medicineModel: medicine))
-                          // .toList(),
                         ),
                       ),
                     );

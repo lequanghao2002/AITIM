@@ -10,7 +10,6 @@ import 'package:lookup_app/screens/splash_screen.dart';
 final Map<String, WidgetBuilder> routes = {
   SplashScreen.routeName: (context) => const SplashScreen(),
   MainScreen.routeName: (context) => const MainScreen(),
-  //DetailScreen.routeName: (context) => const DetailScreen(),
   HomeScreen.routeName: (context) => const HomeScreen(),
   LoveScreen.routeName: (context) => const LoveScreen(),
   CameraScreen.routeName: (context) => const CameraScreen(),

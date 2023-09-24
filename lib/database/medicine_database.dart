@@ -1,13 +1,11 @@
-// ignore_for_file: unnecessary_string_interpolations
-
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:lookup_app/models/medicine_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../data/medicine_data.dart';
 
 class MedicineDatabase {
   MedicineDatabase._privateConstructor();
@@ -24,7 +22,7 @@ class MedicineDatabase {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -50,45 +48,52 @@ class MedicineDatabase {
       )
     ''');
 
-    // final List<MedicineModel> listMedicineData = medicineData;
+    String data = await rootBundle.loadString('assets/medicine_data.json');
 
-    // listMedicineData.forEach((m) async {
-    //   await db.insert('Medicines', {
-    //     'Id': '${m.id}',
-    //     'YeuThich': '${m.yeuThich}',
-    //     'HinhAnh': '${m.hinhAnh}',
-    //     'TenVietNam': '${m.tenVietNam}',
-    //     'TenKhoaHoc': '${m.tenKhoaHoc}',
-    //     'Ho': '${m.ho}',
-    //     'MoTa': '${m.moTa}',
-    //     'CheBien': '${m.cheBien}',
-    //     'TinhVi': '${m.tinhVi}',
-    //     'CongNang': '${m.congNang}',
-    //     'CachDung': '${m.cachDung}',
-    //     'KiengKi': '${m.kiengKi}',
-    //   });
-    // });
+    final json = jsonDecode(data);
+
+    json.forEach((m) async {
+      await db.insert('Medicines', {
+        'Id': m['Id'],
+        'YeuThich': 0,
+        'HinhAnh': m['HinhAnh'],
+        'TenVietNam': m['TenVietNam'],
+        'TenKhoaHoc': m['TenKhoaHoc'],
+        'Ho': m['Ho'],
+        'MoTa': m['MoTa'],
+        'CheBien': m['CheBien'],
+        'TinhVi': m['TinhVi'],
+        'CongNang': m['CongNang'],
+        'CachDung': m['CachDung'],
+        'KiengKi': m['KiengKi']
+      });
+    });
   }
 
   Future _onUpgrade(Database db, int version, int versionNew) async {
+    print('Remove');
+    await db.delete('Medicines');
+
     print('Update');
 
-    final List<MedicineModel> listMedicineData = medicineData;
+    String data = await rootBundle.loadString('assets/medicine_data.json');
 
-    listMedicineData.forEach((m) async {
+    final json = jsonDecode(data);
+
+    json.forEach((m) async {
       await db.insert('Medicines', {
-        'Id': '${m.id}',
-        'YeuThich': '${m.yeuThich}',
-        'HinhAnh': '${m.hinhAnh}',
-        'TenVietNam': '${m.tenVietNam}',
-        'TenKhoaHoc': '${m.tenKhoaHoc}',
-        'Ho': '${m.ho}',
-        'MoTa': '${m.moTa}',
-        'CheBien': '${m.cheBien}',
-        'TinhVi': '${m.tinhVi}',
-        'CongNang': '${m.congNang}',
-        'CachDung': '${m.cachDung}',
-        'KiengKi': '${m.kiengKi}',
+        'Id': m['Id'],
+        'YeuThich': 0,
+        'HinhAnh': m['HinhAnh'],
+        'TenVietNam': m['TenVietNam'],
+        'TenKhoaHoc': m['TenKhoaHoc'],
+        'Ho': m['Ho'],
+        'MoTa': m['MoTa'],
+        'CheBien': m['CheBien'],
+        'TinhVi': m['TinhVi'],
+        'CongNang': m['CongNang'],
+        'CachDung': m['CachDung'],
+        'KiengKi': m['KiengKi']
       });
     });
   }
@@ -109,14 +114,12 @@ class MedicineDatabase {
   }
 
   Future<List<MedicineModel>> getListMedicinesByLove() async {
-    print('Get list medicines by love');
-
     MedicineDatabase.instance._initDatabase();
 
     Database db = await instance.database;
 
-    var medicines =
-        await db.query('Medicines', orderBy: 'Id', where: 'YeuThich = 1');
+    var medicines = await db.query('Medicines',
+        orderBy: 'TenVietNam', where: 'YeuThich = 1');
     List<MedicineModel> listMedicines = medicines.isNotEmpty
         ? medicines.map((c) => MedicineModel.fromMap(c)).toList()
         : [];
@@ -125,8 +128,6 @@ class MedicineDatabase {
   }
 
   void updateMedicines(int id) async {
-    print('update medicines ${id}');
-
     MedicineDatabase.instance._initDatabase();
 
     Database db = await instance.database;
@@ -140,8 +141,6 @@ class MedicineDatabase {
   }
 
   void updateMedicines2(int id) async {
-    print('update medicines ${id}');
-
     MedicineDatabase.instance._initDatabase();
 
     Database db = await instance.database;
@@ -152,5 +151,18 @@ class MedicineDatabase {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<MedicineModel> getMedicineByName(String name) async {
+    MedicineDatabase.instance._initDatabase();
+
+    Database db = await instance.database;
+
+    var medicineByName = await db.query('Medicines',
+        where: 'TenVietNam LIKE ? COLLATE NOCASE', whereArgs: ['%$name%']);
+
+    var medicine = MedicineModel.fromMap(medicineByName.first);
+
+    return medicine;
   }
 }

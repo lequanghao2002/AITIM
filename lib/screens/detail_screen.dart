@@ -5,7 +5,6 @@ import 'package:lookup_app/core/helpers/image_helper.dart';
 import 'package:lookup_app/models/medicine_model.dart';
 
 import '../core/constants/color_constants.dart';
-import '../database/medicine_database.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.medicineModel});
@@ -20,16 +19,32 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
-            child: ImageHelper.loadFromAsset(
-              widget.medicineModel.hinhAnh,
-              //fit: BoxFit.fill,
+          if (widget.medicineModel.hinhAnh.isNotEmpty)
+            Positioned.fill(
+              child: ImageHelper.loadFromNetwork(
+                widget.medicineModel.hinhAnh,
+                //fit: BoxFit.fill,
+              ),
+            )
+          else
+            Center(
+              child: Text(
+                "Chưa cập nhật hình ảnh",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
-          ),
           SizedBox(
             height: 188,
             child: AppBar(
@@ -46,8 +61,6 @@ class _DetailScreenState extends State<DetailScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        ///Navigator.of(context).pushNamed(MainScreen.routeName);
-                        //Navigator.pop(context);
                         Navigator.of(context).pop();
                       },
                       child: Container(
@@ -76,50 +89,32 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                     Spacer(),
                     widget.medicineModel.yeuThich == 0
-                        ? GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                setState(() {
-                                  MedicineDatabase.instance
-                                      .updateMedicines(widget.medicineModel.id);
-                                });
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(kDefaultPadding),
-                                ),
-                                color: Colors.white,
+                        ? Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(kDefaultPadding),
                               ),
-                              padding: EdgeInsets.all(kItemPadding),
-                              child: Icon(
-                                FontAwesomeIcons.heart,
-                                color: Colors.black,
-                                size: kDefaultIconSize,
-                              ),
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(kItemPadding),
+                            child: Icon(
+                              FontAwesomeIcons.heart,
+                              color: Colors.black,
+                              size: kDefaultIconSize,
                             ),
                           )
-                        : GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                MedicineDatabase.instance
-                                    .updateMedicines2(widget.medicineModel.id);
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(kDefaultPadding),
-                                ),
-                                color: Colors.white,
+                        : Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(kDefaultPadding),
                               ),
-                              padding: EdgeInsets.all(kItemPadding),
-                              child: Icon(
-                                FontAwesomeIcons.solidHeart,
-                                color: Colors.red,
-                                size: kDefaultIconSize,
-                              ),
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(kItemPadding),
+                            child: Icon(
+                              FontAwesomeIcons.solidHeart,
+                              color: Colors.red,
+                              size: kDefaultIconSize,
                             ),
                           ),
                   ],
@@ -159,29 +154,43 @@ class _DetailScreenState extends State<DetailScreen> {
                       child: ListView(
                         controller: scrollController,
                         children: [
-                          //--------------------
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                widget.medicineModel.tenVietNam.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              Container(
+                                width: MediaQuery.of(context).size.width - 50,
+                                child: Text(
+                                  widget.medicineModel.tenVietNam.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
+                              )
+                              // Text(
+                              //   widget.medicineModel.tenVietNam.toUpperCase(),
+                              //   style: TextStyle(
+                              //     fontSize: 20,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                widget.medicineModel.tenKhoaHoc,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              Container(
+                                width: MediaQuery.of(context).size.width - 50,
+                                child: Text(
+                                  widget.medicineModel.tenKhoaHoc,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
+                              )
                             ],
                           ),
                           SizedBox(
@@ -337,6 +346,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                 fontSize: 18,
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: 100,
                           ),
                         ],
                       ),
